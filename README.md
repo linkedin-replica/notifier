@@ -27,7 +27,10 @@
 	    d. Redis Config
 	      	i. Host
 
-### 2- Redis:
+### 2- External System:
+	    As was specified in web services.
+
+### 3- Redis:
 	    a. Caching most recent notifications that did not marked as read.
 	    b. Storage Model can be done using Redis Hashes. Hashes are a very convenient data type when you want
 	       to access object’s properties individually since you do not need to retrieve the whole object.	      
@@ -37,9 +40,8 @@ jedis.hset("user#1", "sender", "Peter");
 String name = jedis.hget("user#1", "sender");
 ```
 	
-### 3- Database: 
+### 4- Database: 
 	    Storing data as was specified in Notifications.json.
 
 
-### 4- External System:
-	    As was specified in web services.			
+			
