@@ -1,6 +1,8 @@
 package notifier;
 
 
+import database.ArangoHandler;
+import database.DatabaseHandler;
 import models.Command;
 
 import java.util.HashMap;
@@ -12,6 +14,7 @@ public class SendNotificationCommand extends Command{
 
     public String execute() {
         // TODO
+        DatabaseHandler x = new ArangoHandler();
         return null;
     }
 }

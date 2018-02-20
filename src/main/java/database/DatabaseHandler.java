@@ -2,14 +2,10 @@ package database;
 
 import models.Notification;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface DatabaseHandler {
-    /**
-     * Initiate a connection with the database
-     */
-    void connect();
-
     /**
      * Send a new notification to the user
      * @param userId: The user to send the notification to
@@ -30,9 +26,4 @@ public interface DatabaseHandler {
      * @return The new notifications
      */
     List<Notification> getUnreadNotifications(int userId);
-
-    /**
-     * Close a connection with the database
-     */
-    void disconnect();
 }
