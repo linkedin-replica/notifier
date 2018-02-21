@@ -52,8 +52,19 @@ public class ArangoHandler implements DatabaseHandler{
     }
 
     @Override
-    public void markAsRead(List<Notification> notifcations) {
-        // TODO
+    public void markAllNotificationsAsRead(int userId) {
+        // form the query
+        String query = "FOR t in " + collectionName + " FILTER" +
+                " t.userId == @userId &&" +
+                " t.read == false" +
+                " UPDATE { _key: t._key, read: true } IN " + collectionName;
+
+        // bind the params
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("userId", userId);
+
+        // execute the query
+        dbInstance.query(query, bindVars, null, null);
     }
 
     /**

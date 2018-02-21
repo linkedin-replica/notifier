@@ -29,8 +29,8 @@ public interface DatabaseHandler {
 
 
     /**
-     * Mark a list of notifications as read
-     * @param notifcations: The notifications to mark as read.
+     * Mark all notifications of a user as read
+     * @param userId: The owner of the notifications
      */
-    void markAsRead(List<Notification> notifcations);
+    void markAllNotificationsAsRead(int userId);
 }
