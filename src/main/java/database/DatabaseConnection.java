@@ -1,6 +1,7 @@
 package database;
 
 import com.arangodb.ArangoDB;
+import utils.ConfigReader;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,23 +11,22 @@ import java.util.Properties;
  * A singleton class carrying a database instance
  */
 public class DatabaseConnection {
-    private ArangoDB arangoDBInstance;
+    private ArangoDB arangoDriver;
     private DatabaseHandler dbHandler;
-    private Properties config;
+    private ConfigReader config;
 
     private static DatabaseConnection dbConnection;
 
     private DatabaseConnection() throws IOException {
-        config = new Properties();
-        config.load(new FileInputStream("config"));
+        config = new ConfigReader("database_auth");
 
         initializeArangoDB();
     }
 
     private void initializeArangoDB() {
-        arangoDBInstance = new ArangoDB.Builder()
-                .user(config.getProperty("arangodb.user"))
-                .password(config.getProperty("arangodb.password"))
+        arangoDriver = new ArangoDB.Builder()
+                .user(config.getConfig("arangodb.user"))
+                .password(config.getConfig("arangodb.password"))
                 .build();
     }
 
@@ -41,7 +41,7 @@ public class DatabaseConnection {
     }
 
 
-    public ArangoDB getArangoInstance() {
-        return arangoDBInstance;
+    public ArangoDB getArangoDriver() {
+        return arangoDriver;
     }
 }

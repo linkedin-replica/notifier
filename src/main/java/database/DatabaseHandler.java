@@ -11,7 +11,7 @@ public interface DatabaseHandler {
      * @param userId: The user to send the notification to
      * @param notification: The new notification
      */
-    void sendNotification(int userId, Notification notification);
+    void sendNotification(int userId, Notification notification) throws IOException;
 
     /**
      * Get all notifications for a user
@@ -26,4 +26,11 @@ public interface DatabaseHandler {
      * @return The new notifications
      */
     List<Notification> getUnreadNotifications(int userId);
+
+
+    /**
+     * Mark a list of notifications as read
+     * @param notifcations: The notifications to mark as read.
+     */
+    void markAsRead(List<Notification> notifcations);
 }

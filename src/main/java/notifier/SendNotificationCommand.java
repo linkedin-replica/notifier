@@ -14,7 +14,6 @@ public class SendNotificationCommand extends Command{
 
     public String execute() {
         // TODO
-        DatabaseHandler x = new ArangoHandler();
         return null;
     }
 }
