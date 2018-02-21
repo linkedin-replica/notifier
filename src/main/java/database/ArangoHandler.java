@@ -18,10 +18,13 @@ public class ArangoHandler implements DatabaseHandler{
     private ArangoDatabase dbInstance;
     private ArangoCollection collection;
     private String collectionName;
-    public ArangoHandler() throws IOException {
-        config = new ConfigReader("arango_names");
-        ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
 
+    public ArangoHandler() throws IOException {
+        // read arango constants
+        config = new ConfigReader("arango_names");
+
+        // init db
+        ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
         collectionName = config.getConfig("collection.notifications.name");
         dbInstance = arangoDriver.db(config.getConfig("db.name"));
         collection = dbInstance.collection(collectionName);
@@ -33,24 +36,43 @@ public class ArangoHandler implements DatabaseHandler{
     }
 
     public List<Notification> getAllNotifications(int userId) {
+        // form db query
         String query = "For t in " + collectionName + " FILTER t.userId == @userId RETURN t";
+        return getNotificationsFromDB(query, userId);
+    }
+
+    public List<Notification> getUnreadNotifications(int userId) {
+        // form query db
+        String query = "For t in " + collectionName + " FILTER " +
+                "t.userId == @userId &&" +
+                " t.read == false" +
+                " RETURN t";
+
+        return getNotificationsFromDB(query, userId);
+    }
+
+    @Override
+    public void markAsRead(List<Notification> notifcations) {
+        // TODO
+    }
+
+    /**
+     * Return notifications from db based on a certain query
+     * @param query: The query to fetch the notifications
+     * @param userId: The owner of the notifications
+     * @return The queried notifications
+     */
+    private List<Notification> getNotificationsFromDB(String query, int userId) {
+        // bind the variables in the query
         Map<String, Object> bindVars = new HashMap<>();
         bindVars.put("userId", userId);
+
+        // process query
         ArangoCursor<Notification> cursor = dbInstance.query(query, bindVars, null, Notification.class);
 
         ArrayList<Notification> result = new ArrayList<>();
         for(; cursor.hasNext();)
             result.add(cursor.next());
         return result;
-    }
-
-    public List<Notification> getUnreadNotifications(int userId) {
-        // TODO
-        return null;
-    }
-
-    @Override
-    public void markAsRead(List<Notification> notifcations) {
-        // TODO
     }
 }
