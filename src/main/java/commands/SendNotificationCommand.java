@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class SendNotificationCommand extends Command{
-    SendNotificationCommand(HashMap<String, String> args) {
+    public SendNotificationCommand(HashMap<String, String> args) {
         super(args);
     }
 

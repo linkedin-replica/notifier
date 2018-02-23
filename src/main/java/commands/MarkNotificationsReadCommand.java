@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class MarkNotificationsReadCommand extends Command{
-    MarkNotificationsReadCommand(HashMap<String, String> args) {
+    public MarkNotificationsReadCommand(HashMap<String, String> args) {
         super(args);
     }
 

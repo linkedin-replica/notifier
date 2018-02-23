@@ -14,19 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ArangoHandler implements DatabaseHandler{
-    private ConfigReader config;
     private ArangoDatabase dbInstance;
     private ArangoCollection collection;
     private String collectionName;
 
     public ArangoHandler() throws IOException {
-        // read arango constants
-        config = new ConfigReader("arango_names");
-
         // init db
+        ConfigReader config = ConfigReader.getInstance();
         ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
-        collectionName = config.getConfig("collection.notifications.name");
-        dbInstance = arangoDriver.db(config.getConfig("db.name"));
+        collectionName = config.getArangoConfig("collection.notifications.name");
+        dbInstance = arangoDriver.db(config.getArangoConfig("db.name"));
         collection = dbInstance.collection(collectionName);
     }
 

@@ -15,15 +15,15 @@ class DatabaseConnection {
     private volatile static DatabaseConnection dbConnection;
 
     private DatabaseConnection() throws IOException {
-        config = new ConfigReader("database_auth");
+        config = ConfigReader.getInstance();
 
         initializeArangoDB();
     }
 
     private void initializeArangoDB() {
         arangoDriver = new ArangoDB.Builder()
-                .user(config.getConfig("arangodb.user"))
-                .password(config.getConfig("arangodb.password"))
+                .user(config.getArangoConfig("arangodb.user"))
+                .password(config.getArangoConfig("arangodb.password"))
                 .build();
     }
 

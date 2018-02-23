@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class GetAllNotificationsCommand extends Command{
-    GetAllNotificationsCommand(HashMap<String, String> args) {
+    public GetAllNotificationsCommand(HashMap<String, String> args) {
         super(args);
     }
 

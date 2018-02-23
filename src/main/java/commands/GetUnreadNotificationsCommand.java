@@ -9,7 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class GetUnreadNotificationsCommand extends Command{
-    GetUnreadNotificationsCommand(HashMap<String, String> args) {
+    public GetUnreadNotificationsCommand(HashMap<String, String> args) {
         super(args);
     }
 
