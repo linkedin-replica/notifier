@@ -30,7 +30,7 @@ public class ArangoHandler implements DatabaseHandler{
         collection = dbInstance.collection(collectionName);
     }
 
-    public void sendNotification(int userId, Notification notification) throws IOException {
+    public void sendNotification(int userId, Notification notification) {
         notification.setUserId(userId);
         collection.insertDocument(notification);
     }

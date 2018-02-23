@@ -11,7 +11,7 @@ public interface DatabaseHandler {
      * @param userId: The user to send the notification to
      * @param notification: The new notification
      */
-    void sendNotification(int userId, Notification notification) throws IOException;
+    void sendNotification(int userId, Notification notification);
 
     /**
      * Get all notifications for a user
