@@ -1,30 +1,89 @@
 package database;
 
-
+import com.arangodb.ArangoCollection;
+import com.arangodb.ArangoCursor;
+import com.arangodb.ArangoDB;
+import com.arangodb.ArangoDatabase;
 import models.Notification;
+import utils.ConfigReader;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ArangoHandler implements DatabaseHandler{
-    public void connect() {
-        // TODO
+    private ConfigReader config;
+    private ArangoDatabase dbInstance;
+    private ArangoCollection collection;
+    private String collectionName;
+
+    public ArangoHandler() throws IOException {
+        // read arango constants
+        config = new ConfigReader("arango_names");
+
+        // init db
+        ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
+        collectionName = config.getConfig("collection.notifications.name");
+        dbInstance = arangoDriver.db(config.getConfig("db.name"));
+        collection = dbInstance.collection(collectionName);
     }
 
-    public void sendNotification(int userId, Notification notification) {
-        // TODO
+    public void sendNotification(int userId, Notification notification) throws IOException {
+        notification.setUserId(userId);
+        collection.insertDocument(notification);
     }
 
     public List<Notification> getAllNotifications(int userId) {
-        // TODO
-        return null;
+        // form db query
+        String query = "For t in " + collectionName + " FILTER t.userId == @userId RETURN t";
+        return getNotificationsFromDB(query, userId);
     }
 
     public List<Notification> getUnreadNotifications(int userId) {
-        // TODO
-        return null;
+        // form query db
+        String query = "For t in " + collectionName + " FILTER " +
+                "t.userId == @userId &&" +
+                " t.read == false" +
+                " RETURN t";
+
+        return getNotificationsFromDB(query, userId);
     }
 
-    public void disconnect() {
-        // TODO
+    @Override
+    public void markAllNotificationsAsRead(int userId) {
+        // form the query
+        String query = "FOR t in " + collectionName + " FILTER" +
+                " t.userId == @userId &&" +
+                " t.read == false" +
+                " UPDATE { _key: t._key, read: true } IN " + collectionName;
+
+        // bind the params
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("userId", userId);
+
+        // execute the query
+        dbInstance.query(query, bindVars, null, null);
+    }
+
+    /**
+     * Return notifications from db based on a certain query
+     * @param query: The query to fetch the notifications
+     * @param userId: The owner of the notifications
+     * @return The queried notifications
+     */
+    private List<Notification> getNotificationsFromDB(String query, int userId) {
+        // bind the variables in the query
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("userId", userId);
+
+        // process query
+        ArangoCursor<Notification> cursor = dbInstance.query(query, bindVars, null, Notification.class);
+
+        ArrayList<Notification> result = new ArrayList<>();
+        for(; cursor.hasNext();)
+            result.add(cursor.next());
+        return result;
     }
 }

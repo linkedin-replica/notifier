@@ -4,30 +4,36 @@ package models;
  * Holder model for the notification
  */
 public class Notification {
-    private int id;
-    private String text, link, timeStamp;
+    private String notificationText, link;
+    private long timeStamp;
+    private int userId;
     private boolean read;
-    Notification(int id, String text, String link, String timeStamp, boolean read) {
-        this.id = id;
-        this.text = text;
+    public Notification(String text, String link, long timeStamp, boolean read) {
+        this.notificationText = text;
         this.link = link;
         this.timeStamp = timeStamp;
         this.read = read;
     }
 
-    public int getId() {
-        return id;
+    public Notification() {}
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getText() {
-        return text;
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getNotificationText() {
+        return notificationText;
     }
 
     public String getLink() {
         return link;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
