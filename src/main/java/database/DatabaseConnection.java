@@ -3,19 +3,16 @@ package database;
 import com.arangodb.ArangoDB;
 import utils.ConfigReader;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 /**
  * A singleton class carrying a database instance
  */
-public class DatabaseConnection {
+class DatabaseConnection {
     private ArangoDB arangoDriver;
-    private DatabaseHandler dbHandler;
     private ConfigReader config;
 
-    private static DatabaseConnection dbConnection;
+    private volatile static DatabaseConnection dbConnection;
 
     private DatabaseConnection() throws IOException {
         config = new ConfigReader("database_auth");
@@ -34,14 +31,18 @@ public class DatabaseConnection {
      * Get a singleton DB instance
      * @return The DB instance
      */
-    public static DatabaseConnection getDBConnection() throws IOException {
-        if(dbConnection == null)
-            dbConnection = new DatabaseConnection();
+    static DatabaseConnection getDBConnection() throws IOException {
+        if(dbConnection == null) {
+            synchronized (DatabaseConnection.class) {
+                if (dbConnection == null)
+                    dbConnection = new DatabaseConnection();
+            }
+        }
         return dbConnection;
     }
 
 
-    public ArangoDB getArangoDriver() {
+    ArangoDB getArangoDriver() {
         return arangoDriver;
     }
 }
