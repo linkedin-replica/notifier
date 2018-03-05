@@ -23,10 +23,12 @@ public class MessagesReceiver {
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
+        // declare the queue if it does not exist
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
         System.out.println("Started notification receiver successfully.");
 
+        // Create the consumer (listener) for the new messages
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
@@ -43,7 +45,6 @@ public class MessagesReceiver {
                 args.put("text", text);
                 args.put("link", link);
 
-
                 String commandName = "send.notification";
                 try {
                     notificationService.serve(commandName, args);
@@ -53,6 +54,8 @@ public class MessagesReceiver {
                 }
             }
         };
+
+        // attach the consumer
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
