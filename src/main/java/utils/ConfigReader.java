@@ -49,6 +49,10 @@ public class ConfigReader {
         return Class.forName(handlersPackageName + '.' + appConfig.get("handler.nosql"));
     }
 
+    public String getAppConfig(String key) {
+        return appConfig.getProperty(key);
+    }
+
     public String getArangoConfig(String key) {
         return arangoConfig.getProperty(key);
     }
