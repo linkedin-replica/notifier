@@ -12,9 +12,11 @@ public class ConfigReader {
 
     private volatile static ConfigReader instance;
 
+    public static boolean isTesting;
+
     private ConfigReader() throws IOException {
         populateWithConfig("commands.config", commandNameToClass);
-        populateWithConfig("arango.config", arangoConfig);
+        populateWithConfig(isTesting ? "arango.test.config" : "arango.config", arangoConfig);
         populateWithConfig("app.config", appConfig);
     }
 

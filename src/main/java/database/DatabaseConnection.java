@@ -8,7 +8,7 @@ import java.io.IOException;
 /**
  * A singleton class carrying a database instance
  */
-class DatabaseConnection {
+public class DatabaseConnection {
     private ArangoDB arangoDriver;
     private ConfigReader config;
 
@@ -31,7 +31,7 @@ class DatabaseConnection {
      * Get a singleton DB instance
      * @return The DB instance
      */
-    static DatabaseConnection getDBConnection() throws IOException {
+    public static DatabaseConnection getDBConnection() throws IOException {
         if(dbConnection == null) {
             synchronized (DatabaseConnection.class) {
                 if (dbConnection == null)
@@ -42,7 +42,11 @@ class DatabaseConnection {
     }
 
 
-    ArangoDB getArangoDriver() {
+    public ArangoDB getArangoDriver() {
         return arangoDriver;
+    }
+
+    public void closeConnections() {
+        arangoDriver.shutdown();
     }
 }
