@@ -1,10 +1,9 @@
 import com.arangodb.ArangoDatabase;
-import database.ArangoHandler;
-import database.DatabaseConnection;
-import models.Notification;
+import com.linkedin.replica.database.DatabaseConnection;
+import com.linkedin.replica.models.Notification;
 import org.junit.*;
-import services.NotificationService;
-import utils.ConfigReader;
+import com.linkedin.replica.services.NotificationService;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,15 +16,19 @@ import static org.junit.Assert.assertEquals;
 public class NotificationServiceTest {
     private static NotificationService notificationService;
     private static ArangoDatabase arangoDb;
-    static ConfigReader config;
+    static Configuration config;
 
     @BeforeClass
     public static void init() throws IOException {
-        ConfigReader.isTesting = true;
-        config = ConfigReader.getInstance();
+        String rootFolder = "src/main/resources/config/";
+        Configuration.init(rootFolder + "app.config",
+                rootFolder + "arango.test.config",
+                rootFolder + "commands.config");
+        DatabaseConnection.init();
+        config = Configuration.getInstance();
         notificationService = new NotificationService();
-        arangoDb = DatabaseConnection.getDBConnection().getArangoDriver().db(
-                ConfigReader.getInstance().getArangoConfig("db.name")
+        arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
+                Configuration.getInstance().getArangoConfig("db.name")
         );
     }
 
@@ -43,31 +46,31 @@ public class NotificationServiceTest {
         args.put("text", "notification text");
         args.put("link", "notification link");
 
-        notificationService.serve("send.notification", args);
+        notificationService.serve("notifications.send", args);
 
 
         args.clear();
         args.put("userId", "1234");
 
-        LinkedHashMap<String, Object> result = notificationService.serve("all.notifications", args);
+        LinkedHashMap<String, Object> result = notificationService.serve("notifications.all", args);
         List<Notification> all = (List<Notification>) result.get("results");
 
         assertEquals("Expected 1 notification" ,1, all.size());
 
-        notificationService.serve("mark.read",  args);
+        notificationService.serve("notifications.mark.read",  args);
 
 
         args.put("text", "notification text 2");
         args.put("link", "notification link 2");
-        notificationService.serve("send.notification", args);
+        notificationService.serve("notifications.send", args);
 
         args.clear();
         args.put("userId", "1234");
 
-        result = notificationService.serve("all.notifications", args);
+        result = notificationService.serve("notifications.all", args);
         all = (List<Notification>) result.get("results");
 
-        result = notificationService.serve("unread.notifications", args);
+        result = notificationService.serve("notifications.unread", args);
         List<Notification> unread = (List<Notification>) result.get("results");
 
         assertEquals("Expected 2 notifications" , 2, all.size());
@@ -83,7 +86,6 @@ public class NotificationServiceTest {
 
     @AfterClass
     public static void clean() throws IOException {
-        ConfigReader.isTesting = false;
-        DatabaseConnection.getDBConnection().closeConnections();
+        DatabaseConnection.getInstance().closeConnections();
     }
 }
