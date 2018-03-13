@@ -1,9 +1,8 @@
-package models;
+package com.linkedin.replica.commands;
 
 
-import database.DatabaseHandler;
+import com.linkedin.replica.database.handlers.DatabaseHandler;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 

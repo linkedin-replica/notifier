@@ -1,21 +1,20 @@
-package services;
+package com.linkedin.replica.services;
 
-import database.DatabaseHandler;
-import models.Command;
-import utils.ConfigReader;
+import com.linkedin.replica.database.handlers.DatabaseHandler;
+import com.linkedin.replica.commands.Command;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 public class NotificationService {
-    private ConfigReader config;
+    private Configuration config;
 
     public NotificationService() throws IOException {
-        config = ConfigReader.getInstance();
+        config = Configuration.getInstance();
     }
 
     public LinkedHashMap<String, Object> serve(String commandName, HashMap<String, String> args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -23,10 +22,10 @@ public class NotificationService {
         Constructor constructor = commandClass.getConstructor(HashMap.class);
         Command command = (Command) constructor.newInstance(args);
 
-        Class<?> noSqlHandlerClass = config.getNoSqlHandler();
-        DatabaseHandler noSqlHandler = (DatabaseHandler) noSqlHandlerClass.newInstance();
+        Class<?> dbHandlerClass = config.getHandlerClass(commandName);
+        DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();
 
-        command.setDbHandler(noSqlHandler);
+        command.setDbHandler(dbHandler);
 
         return command.execute();
     }

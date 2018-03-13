@@ -1,10 +1,10 @@
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDatabase;
-import database.ArangoHandler;
-import database.DatabaseConnection;
-import models.Notification;
+import com.linkedin.replica.database.handlers.impl.ArangoNotificationsHandler;
+import com.linkedin.replica.database.DatabaseConnection;
+import com.linkedin.replica.models.Notification;
 import org.junit.*;
-import utils.ConfigReader;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,17 +14,20 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class ArangoHandlerTest {
-    private static ArangoHandler arangoHandler;
+    private static ArangoNotificationsHandler arangoNotificationsHandler;
     private static ArangoDatabase arangoDb;
-    static ConfigReader config;
+    static Configuration config;
 
     @BeforeClass
     public static void init() throws IOException {
-        ConfigReader.isTesting = true;
-        config = ConfigReader.getInstance();
-        arangoHandler = new ArangoHandler();
+        String rootFolder = "src/main/resources/config/";
+        Configuration.init(rootFolder + "app.config",
+                rootFolder + "arango.test.config",
+                rootFolder + "commands.config");
+        config = Configuration.getInstance();
+        arangoNotificationsHandler = new ArangoNotificationsHandler();
         arangoDb = DatabaseConnection.getDBConnection().getArangoDriver().db(
-                ConfigReader.getInstance().getArangoConfig("db.name")
+                Configuration.getInstance().getArangoConfig("db.name")
         );
     }
 
@@ -45,7 +48,7 @@ public class ArangoHandlerTest {
                         time,
                         false);
         int userId = 12345;
-        arangoHandler.sendNotification(userId, newNotification);
+        arangoNotificationsHandler.sendNotification(userId, newNotification);
         String query = "FOR t in " + collectionName + " RETURN t";
         ArangoCursor<Notification> allNotificationsCursor = arangoDb.query(query,
                 new HashMap<String, Object>(),
@@ -55,7 +58,7 @@ public class ArangoHandlerTest {
         while (allNotificationsCursor.hasNext())
             allNotifications.add(allNotificationsCursor.next());
 
-        assertEquals("Expected to have one notification in database", 1, allNotifications.size());
+        assertEquals("Expected to have one notification in com.linkedin.replica.database", 1, allNotifications.size());
 
         newNotification = allNotifications.get(0);
         assertEquals("Expected matching notification text", "notification text", newNotification.getNotificationText());
@@ -77,18 +80,18 @@ public class ArangoHandlerTest {
                         System.currentTimeMillis(),
                         true);
         int userId = 1234;
-        arangoHandler.sendNotification(userId, n1);
-        arangoHandler.sendNotification(userId, n2);
+        arangoNotificationsHandler.sendNotification(userId, n1);
+        arangoNotificationsHandler.sendNotification(userId, n2);
 
-        List<Notification> all = arangoHandler.getAllNotifications(userId);
+        List<Notification> all = arangoNotificationsHandler.getAllNotifications(userId);
         assertEquals("Expected 2 notifications", 2, all.size());
 
-        List<Notification> unread = arangoHandler.getUnreadNotifications(userId);
+        List<Notification> unread = arangoNotificationsHandler.getUnreadNotifications(userId);
         assertEquals("Expected 1 unread notification", 1, unread.size());
 
-        arangoHandler.markAllNotificationsAsRead(userId);
-        all = arangoHandler.getAllNotifications(userId);
-        unread = arangoHandler.getUnreadNotifications(userId);
+        arangoNotificationsHandler.markAllNotificationsAsRead(userId);
+        all = arangoNotificationsHandler.getAllNotifications(userId);
+        unread = arangoNotificationsHandler.getUnreadNotifications(userId);
         assertEquals("Expected 2 notifications", 2, all.size());
         assertEquals("Expected 0 unread notification", 0, unread.size());
     }
@@ -102,7 +105,6 @@ public class ArangoHandlerTest {
 
     @AfterClass
     public static void clean() throws IOException {
-        ConfigReader.isTesting = false;
         DatabaseConnection.getDBConnection().closeConnections();
     }
 }
