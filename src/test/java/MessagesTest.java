@@ -1,11 +1,11 @@
 import com.arangodb.ArangoDatabase;
 import com.google.gson.JsonObject;
+import com.linkedin.replica.config.Configuration;
+import com.linkedin.replica.database.DatabaseConnection;
+import com.linkedin.replica.messaging.MessagesReceiver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import database.DatabaseConnection;
-import messaging.MessagesReceiver;
-import utils.ConfigReader;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -13,23 +13,27 @@ import java.util.concurrent.TimeoutException;
 import org.junit.*;
 
 public class MessagesTest {
-    private static ConfigReader config;
+    private static Configuration config;
     private static String QUEUE_NAME;
     private static MessagesReceiver messagesReceiver;
     private static ArangoDatabase arangoDb;
 
     @BeforeClass
     public static void init() throws IOException, TimeoutException {
-        ConfigReader.isTesting = true;
-        config = ConfigReader.getInstance();
+        String rootFolder = "src/main/resources/config/";
+        Configuration.init(rootFolder + "app.config",
+                rootFolder + "arango.test.config",
+                rootFolder + "commands.config");
+        DatabaseConnection.init();
+        config = Configuration.getInstance();
 
         // init message receiver
         QUEUE_NAME = config.getAppConfig("rabbitmq.queue");
         messagesReceiver = new MessagesReceiver();
 
         // init db
-        arangoDb = DatabaseConnection.getDBConnection().getArangoDriver().db(
-                ConfigReader.getInstance().getArangoConfig("db.name")
+        arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
+                Configuration.getInstance().getArangoConfig("db.name")
         );
 
         arangoDb.createCollection(
@@ -58,8 +62,6 @@ public class MessagesTest {
 
     @AfterClass
     public static void clean() throws IOException, TimeoutException {
-        ConfigReader.isTesting = false;
-
         // close message queue connection
         messagesReceiver.closeConnection();
 
@@ -67,6 +69,6 @@ public class MessagesTest {
         arangoDb.collection(
                 config.getArangoConfig("collection.notifications.name")
         ).drop();
-        DatabaseConnection.getDBConnection().closeConnections();
+        DatabaseConnection.getInstance().closeConnections();
     }
 }
