@@ -1,6 +1,6 @@
-package com.linkedin.replica.database.handlers;
+package com.linkedin.replica.notifier.database.handlers;
 
-import com.linkedin.replica.models.Notification;
+import com.linkedin.replica.notifier.models.Notification;
 
 import java.util.List;
 

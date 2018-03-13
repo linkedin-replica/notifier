@@ -1,8 +1,8 @@
-package com.linkedin.replica.services;
+package com.linkedin.replica.notifier.services;
 
-import com.linkedin.replica.database.handlers.DatabaseHandler;
-import com.linkedin.replica.commands.Command;
-import com.linkedin.replica.config.Configuration;
+import com.linkedin.replica.notifier.database.handlers.DatabaseHandler;
+import com.linkedin.replica.notifier.commands.Command;
+import com.linkedin.replica.notifier.config.Configuration;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;

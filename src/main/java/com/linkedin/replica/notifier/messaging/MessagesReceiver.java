@@ -1,11 +1,11 @@
-package com.linkedin.replica.messaging;
+package com.linkedin.replica.notifier.messaging;
 
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.linkedin.replica.notifier.config.Configuration;
+import com.linkedin.replica.notifier.services.NotificationService;
 import com.rabbitmq.client.*;
-import com.linkedin.replica.services.NotificationService;
-import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.util.HashMap;

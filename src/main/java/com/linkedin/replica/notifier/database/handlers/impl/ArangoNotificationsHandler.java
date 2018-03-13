@@ -1,13 +1,13 @@
-package com.linkedin.replica.database.handlers.impl;
+package com.linkedin.replica.notifier.database.handlers.impl;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
-import com.linkedin.replica.database.DatabaseConnection;
-import com.linkedin.replica.database.handlers.NotificationsHandler;
-import com.linkedin.replica.models.Notification;
-import com.linkedin.replica.config.Configuration;
+import com.linkedin.replica.notifier.database.DatabaseConnection;
+import com.linkedin.replica.notifier.database.handlers.NotificationsHandler;
+import com.linkedin.replica.notifier.models.Notification;
+import com.linkedin.replica.notifier.config.Configuration;
 
 import java.io.IOException;
 import java.util.ArrayList;

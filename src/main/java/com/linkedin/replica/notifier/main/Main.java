@@ -1,7 +1,7 @@
-package com.linkedin.replica.main;
+package com.linkedin.replica.notifier.main;
 
-import com.linkedin.replica.config.Configuration;
-import com.linkedin.replica.database.DatabaseConnection;
+import com.linkedin.replica.notifier.config.Configuration;
+import com.linkedin.replica.notifier.database.DatabaseConnection;
 
 import java.io.IOException;
 import java.sql.SQLException;

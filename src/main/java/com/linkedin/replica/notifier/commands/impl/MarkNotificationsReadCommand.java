@@ -1,8 +1,8 @@
-package com.linkedin.replica.commands.impl;
+package com.linkedin.replica.notifier.commands.impl;
 
 
-import com.linkedin.replica.commands.Command;
-import com.linkedin.replica.database.handlers.NotificationsHandler;
+import com.linkedin.replica.notifier.commands.Command;
+import com.linkedin.replica.notifier.database.handlers.NotificationsHandler;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

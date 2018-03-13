@@ -1,7 +1,7 @@
-package com.linkedin.replica.config;
+package com.linkedin.replica.notifier.config;
 
-import com.linkedin.replica.commands.Command;
-import com.linkedin.replica.database.handlers.DatabaseHandler;
+import com.linkedin.replica.notifier.commands.Command;
+import com.linkedin.replica.notifier.database.handlers.DatabaseHandler;
 
 import java.io.FileInputStream;
 import java.io.IOException;
