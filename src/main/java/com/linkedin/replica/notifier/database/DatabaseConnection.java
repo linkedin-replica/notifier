@@ -1,7 +1,7 @@
-package com.linkedin.replica.database;
+package com.linkedin.replica.notifier.database;
 
 import com.arangodb.ArangoDB;
-import com.linkedin.replica.config.Configuration;
+import com.linkedin.replica.notifier.config.Configuration;
 
 import java.io.IOException;
 

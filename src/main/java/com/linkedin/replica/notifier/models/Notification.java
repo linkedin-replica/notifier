@@ -1,4 +1,4 @@
-package com.linkedin.replica.models;
+package com.linkedin.replica.notifier.models;
 
 /**
  * Holder model for the notification

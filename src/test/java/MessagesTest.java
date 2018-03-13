@@ -1,8 +1,8 @@
 import com.arangodb.ArangoDatabase;
 import com.google.gson.JsonObject;
-import com.linkedin.replica.config.Configuration;
-import com.linkedin.replica.database.DatabaseConnection;
-import com.linkedin.replica.messaging.MessagesReceiver;
+import com.linkedin.replica.notifier.config.Configuration;
+import com.linkedin.replica.notifier.database.DatabaseConnection;
+import com.linkedin.replica.notifier.messaging.MessagesReceiver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
