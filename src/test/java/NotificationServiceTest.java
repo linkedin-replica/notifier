@@ -52,8 +52,8 @@ public class NotificationServiceTest {
         args.clear();
         args.put("userId", "1234");
 
-        LinkedHashMap<String, Object> result = notificationService.serve("notifications.all", args);
-        List<Notification> all = (List<Notification>) result.get("results");
+        Object result = notificationService.serve("notifications.all", args);
+        List<Notification> all = (List<Notification>) result;
 
         assertEquals("Expected 1 notification" ,1, all.size());
 
@@ -68,10 +68,10 @@ public class NotificationServiceTest {
         args.put("userId", "1234");
 
         result = notificationService.serve("notifications.all", args);
-        all = (List<Notification>) result.get("results");
+        all = (List<Notification>) result;
 
         result = notificationService.serve("notifications.unread", args);
-        List<Notification> unread = (List<Notification>) result.get("results");
+        List<Notification> unread = (List<Notification>) result;
 
         assertEquals("Expected 2 notifications" , 2, all.size());
         assertEquals("Expected 1 unread notification", 1, unread.size());

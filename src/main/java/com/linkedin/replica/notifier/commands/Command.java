@@ -18,7 +18,7 @@ public abstract class Command {
      * Execute the command
      * @return The output (if any) of the command
      */
-    public abstract LinkedHashMap<String, Object> execute();
+    public abstract Object execute();
 
     /**
      * Set the configured db handler

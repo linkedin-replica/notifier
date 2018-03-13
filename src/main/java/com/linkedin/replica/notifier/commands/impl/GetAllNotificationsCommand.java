@@ -14,16 +14,12 @@ public class GetAllNotificationsCommand extends Command {
         super(args);
     }
 
-    public LinkedHashMap<String, Object> execute() {
+    public Object execute() {
         NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
 
         // get notifications from db
-        List<Notification> notifications = dbHandler.getAllNotifications(Integer.parseInt(args.get("userId")));
-
-        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-        result.put("results", notifications);
-        return result;
+        return dbHandler.getAllNotifications(Integer.parseInt(args.get("userId")));
     }
 }
