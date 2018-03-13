@@ -17,16 +17,21 @@ public class MessagesReceiver {
     private final String QUEUE_NAME = configuration.getAppConfig("rabbitmq.queue");
     private final String RABBIT_MQ_IP = configuration.getAppConfig("rabbitmq.ip");;
 
-    public MessagesReceiver() throws IOException, TimeoutException {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(RABBIT_MQ_IP);
-        Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+    private ConnectionFactory factory;
+    private Channel channel;
+    private Connection connection;
 
+    public MessagesReceiver() throws IOException, TimeoutException {
+        factory = new ConnectionFactory();
+        factory.setHost(RABBIT_MQ_IP);
+        connection = factory.newConnection();
+        channel = connection.createChannel();
+        // declare the queue if it does not exist
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
         System.out.println("Started notification receiver successfully.");
 
+        // Create the consumer (listener) for the new messages
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope,
@@ -43,7 +48,6 @@ public class MessagesReceiver {
                 args.put("text", text);
                 args.put("link", link);
 
-
                 String commandName = "send.notification";
                 try {
                     notificationService.serve(commandName, args);
@@ -53,10 +57,13 @@ public class MessagesReceiver {
                 }
             }
         };
+
+        // attach the consumer
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
-    public static void main(String[] args) throws IOException, TimeoutException {
-        new MessagesReceiver();
+    public void closeConnection() throws IOException, TimeoutException {
+        channel.close();
+        connection.close();
     }
 }
