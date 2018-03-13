@@ -1,20 +1,21 @@
-package commands;
+package com.linkedin.replica.commands.impl;
 
 
-import models.Command;
-import models.Notification;
+import com.linkedin.replica.commands.Command;
+import com.linkedin.replica.database.handlers.NotificationsHandler;
+import com.linkedin.replica.models.Notification;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
-public class GetAllNotificationsCommand extends Command{
+public class GetAllNotificationsCommand extends Command {
     public GetAllNotificationsCommand(HashMap<String, String> args) {
         super(args);
     }
 
     public LinkedHashMap<String, Object> execute() {
+        NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
 

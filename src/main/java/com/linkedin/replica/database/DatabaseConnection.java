@@ -1,21 +1,21 @@
-package database;
+package com.linkedin.replica.database;
 
 import com.arangodb.ArangoDB;
-import utils.ConfigReader;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 
 /**
- * A singleton class carrying a database instance
+ * A singleton class carrying a com.linkedin.replica.database instance
  */
 public class DatabaseConnection {
     private ArangoDB arangoDriver;
-    private ConfigReader config;
+    private Configuration config;
 
-    private volatile static DatabaseConnection dbConnection;
+    private static DatabaseConnection dbConnection;
 
     private DatabaseConnection() throws IOException {
-        config = ConfigReader.getInstance();
+        config = Configuration.getInstance();
 
         initializeArangoDB();
     }
@@ -27,17 +27,15 @@ public class DatabaseConnection {
                 .build();
     }
 
+    public static void init() throws IOException {
+        dbConnection = new DatabaseConnection();
+    }
+
     /**
      * Get a singleton DB instance
      * @return The DB instance
      */
-    public static DatabaseConnection getDBConnection() throws IOException {
-        if(dbConnection == null) {
-            synchronized (DatabaseConnection.class) {
-                if (dbConnection == null)
-                    dbConnection = new DatabaseConnection();
-            }
-        }
+    public static DatabaseConnection getInstance() throws IOException {
         return dbConnection;
     }
 

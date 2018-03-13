@@ -28,7 +28,7 @@
 	      	i. Host
 
 ### 2- External System:
-	    As was specified in web services.
+	    As was specified in web com.linkedin.replica.services.
 
 ### 3- Redis:
 	    a. Caching most recent notifications that did not marked as read.

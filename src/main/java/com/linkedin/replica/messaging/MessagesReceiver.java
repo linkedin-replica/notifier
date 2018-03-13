@@ -1,21 +1,21 @@
-package messaging;
+package com.linkedin.replica.messaging;
 
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rabbitmq.client.*;
-import services.NotificationService;
-import utils.ConfigReader;
+import com.linkedin.replica.services.NotificationService;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
 public class MessagesReceiver {
-    private ConfigReader configReader = ConfigReader.getInstance();
+    private Configuration configuration = Configuration.getInstance();
     private NotificationService notificationService = new NotificationService();
-    private final String QUEUE_NAME = configReader.getAppConfig("rabbitmq.queue");
-    private final String RABBIT_MQ_IP = configReader.getAppConfig("rabbitmq.ip");;
+    private final String QUEUE_NAME = configuration.getAppConfig("rabbitmq.queue");
+    private final String RABBIT_MQ_IP = configuration.getAppConfig("rabbitmq.ip");;
 
     private ConnectionFactory factory;
     private Channel channel;

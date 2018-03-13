@@ -1,11 +1,10 @@
-package database;
+package com.linkedin.replica.database.handlers;
 
-import models.Notification;
+import com.linkedin.replica.models.Notification;
 
-import java.io.IOException;
 import java.util.List;
 
-public interface DatabaseHandler {
+public interface NotificationsHandler extends DatabaseHandler{
     /**
      * Send a new notification to the user
      * @param userId: The user to send the notification to

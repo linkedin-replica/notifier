@@ -1,11 +1,13 @@
-package database;
+package com.linkedin.replica.database.handlers.impl;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
-import models.Notification;
-import utils.ConfigReader;
+import com.linkedin.replica.database.DatabaseConnection;
+import com.linkedin.replica.database.handlers.NotificationsHandler;
+import com.linkedin.replica.models.Notification;
+import com.linkedin.replica.config.Configuration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,15 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ArangoHandler implements DatabaseHandler{
+public class ArangoNotificationsHandler implements NotificationsHandler {
     private ArangoDatabase dbInstance;
     private ArangoCollection collection;
     private String collectionName;
 
-    public ArangoHandler() throws IOException {
+    public ArangoNotificationsHandler() throws IOException {
         // init db
-        ConfigReader config = ConfigReader.getInstance();
-        ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
+        Configuration config = Configuration.getInstance();
+        ArangoDB arangoDriver = DatabaseConnection.getInstance().getArangoDriver();
         collectionName = config.getArangoConfig("collection.notifications.name");
         dbInstance = arangoDriver.db(config.getArangoConfig("db.name"));
         collection = dbInstance.collection(collectionName);
