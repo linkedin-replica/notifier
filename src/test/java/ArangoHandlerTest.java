@@ -24,9 +24,10 @@ public class ArangoHandlerTest {
         Configuration.init(rootFolder + "app.config",
                 rootFolder + "arango.test.config",
                 rootFolder + "commands.config");
+        DatabaseConnection.init();
         config = Configuration.getInstance();
         arangoNotificationsHandler = new ArangoNotificationsHandler();
-        arangoDb = DatabaseConnection.getDBConnection().getArangoDriver().db(
+        arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
                 Configuration.getInstance().getArangoConfig("db.name")
         );
     }
@@ -105,6 +106,6 @@ public class ArangoHandlerTest {
 
     @AfterClass
     public static void clean() throws IOException {
-        DatabaseConnection.getDBConnection().closeConnections();
+        DatabaseConnection.getInstance().closeConnections();
     }
 }

@@ -23,7 +23,7 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
     public ArangoNotificationsHandler() throws IOException {
         // init db
         Configuration config = Configuration.getInstance();
-        ArangoDB arangoDriver = DatabaseConnection.getDBConnection().getArangoDriver();
+        ArangoDB arangoDriver = DatabaseConnection.getInstance().getArangoDriver();
         collectionName = config.getArangoConfig("collection.notifications.name");
         dbInstance = arangoDriver.db(config.getArangoConfig("db.name"));
         collection = dbInstance.collection(collectionName);
