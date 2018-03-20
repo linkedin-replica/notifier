@@ -4,7 +4,6 @@ import com.google.gson.JsonParser;
 import com.linkedin.replica.notifier.config.Configuration;
 import com.linkedin.replica.notifier.database.DatabaseConnection;
 import com.linkedin.replica.notifier.database.handlers.impl.ArangoNotificationsHandler;
-import com.linkedin.replica.notifier.exceptions.BadRequestException;
 import com.linkedin.replica.notifier.messaging.ClientMessagesReceiver;
 import com.linkedin.replica.notifier.models.Notification;
 import com.rabbitmq.client.*;
@@ -31,7 +30,6 @@ public class ClientMessagesTest {
     private static ConnectionFactory factory;
     private static Connection connection;
     private static Channel channel;
-    private static String replyQueueName;
 
     @BeforeClass
     public static void init() throws IOException, TimeoutException {
@@ -61,9 +59,6 @@ public class ClientMessagesTest {
         factory.setHost("localhost");
         connection = factory.newConnection();
         channel = connection.createChannel();
-
-        replyQueueName = channel.queueDeclare().getQueue();
-
     }
 
     @Test
@@ -73,6 +68,8 @@ public class ClientMessagesTest {
         byte[] message = object.toString().getBytes();
         final String corrId = UUID.randomUUID().toString();
 
+        String replyQueueName = channel.queueDeclare().getQueue();
+        
         AMQP.BasicProperties props = new AMQP.BasicProperties
                 .Builder()
                 .correlationId(corrId)
@@ -108,6 +105,8 @@ public class ClientMessagesTest {
         byte[] message = object.toString().getBytes();
         final String corrId = UUID.randomUUID().toString();
 
+        String replyQueueName = channel.queueDeclare().getQueue();
+        
         AMQP.BasicProperties props = new AMQP.BasicProperties
                 .Builder()
                 .correlationId(corrId)
