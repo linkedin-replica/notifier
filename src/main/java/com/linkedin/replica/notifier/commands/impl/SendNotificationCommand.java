@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class SendNotificationCommand extends Command {
-    public SendNotificationCommand(HashMap<String, String> args) {
+    public SendNotificationCommand(HashMap<String, Object> args) {
         super(args);
     }
 
@@ -18,9 +18,9 @@ public class SendNotificationCommand extends Command {
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId", "text", "link"});
 
-        int userId = Integer.parseInt(args.get("userId"));
-        String notificationText = args.get("text");
-        String notificationLink = args.get("link");
+        int userId = Integer.parseInt(args.get("userId").toString());
+        String notificationText = args.get("text").toString();
+        String notificationLink = args.get("link").toString();
         long timeStamp = System.currentTimeMillis();
 
         // insert new notification in db

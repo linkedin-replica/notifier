@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class GetUnreadNotificationsCommand extends Command {
-    public GetUnreadNotificationsCommand(HashMap<String, String> args) {
+    public GetUnreadNotificationsCommand(HashMap<String, Object> args) {
         super(args);
     }
 
@@ -20,6 +20,6 @@ public class GetUnreadNotificationsCommand extends Command {
         validateArgs(new String[]{"userId"});
 
         // get unread notifications from db
-        return dbHandler.getUnreadNotifications(Integer.parseInt(args.get("userId")));
+        return dbHandler.getUnreadNotifications(Integer.parseInt(args.get("userId").toString()));
     }
 }

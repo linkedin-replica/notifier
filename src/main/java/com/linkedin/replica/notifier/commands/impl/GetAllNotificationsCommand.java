@@ -10,7 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class GetAllNotificationsCommand extends Command {
-    public GetAllNotificationsCommand(HashMap<String, String> args) {
+    public GetAllNotificationsCommand(HashMap<String, Object> args) {
         super(args);
     }
 
@@ -20,6 +20,6 @@ public class GetAllNotificationsCommand extends Command {
         validateArgs(new String[]{"userId"});
 
         // get notifications from db
-        return dbHandler.getAllNotifications(Integer.parseInt(args.get("userId")));
+        return dbHandler.getAllNotifications(Integer.parseInt(args.get("userId").toString()));
     }
 }

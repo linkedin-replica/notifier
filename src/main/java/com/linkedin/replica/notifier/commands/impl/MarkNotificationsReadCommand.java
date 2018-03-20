@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class MarkNotificationsReadCommand extends Command {
-    public MarkNotificationsReadCommand(HashMap<String, String> args) {
+    public MarkNotificationsReadCommand(HashMap<String, Object> args) {
         super(args);
     }
 
@@ -17,7 +17,7 @@ public class MarkNotificationsReadCommand extends Command {
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
 
-        int userId = Integer.parseInt(args.get("userId"));
+        int userId = Integer.parseInt(args.get("userId").toString());
 
         // mark notifications as read in db
         dbHandler.markAllNotificationsAsRead(userId);
