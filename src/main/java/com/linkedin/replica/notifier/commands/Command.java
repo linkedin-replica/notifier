@@ -2,6 +2,7 @@ package com.linkedin.replica.notifier.commands;
 
 
 import com.linkedin.replica.notifier.database.handlers.DatabaseHandler;
+import com.linkedin.replica.notifier.exceptions.BadRequestException;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -18,7 +19,7 @@ public abstract class Command {
      * Execute the command
      * @return The output (if any) of the command
      */
-    public abstract LinkedHashMap<String, Object> execute();
+    public abstract Object execute();
 
     /**
      * Set the configured db handler
@@ -32,7 +33,7 @@ public abstract class Command {
         for(String arg: requiredArgs)
             if(!args.containsKey(arg)) {
                 String exceptionMsg = String.format("Cannot execute command. %s argument is missing", arg);
-                throw new IllegalArgumentException(exceptionMsg);
+                throw new BadRequestException(exceptionMsg);
             }
     }
 }

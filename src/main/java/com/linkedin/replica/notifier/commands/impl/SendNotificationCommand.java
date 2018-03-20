@@ -13,7 +13,7 @@ public class SendNotificationCommand extends Command {
         super(args);
     }
 
-    public LinkedHashMap<String, Object> execute() {
+    public Object execute() {
         NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId", "text", "link"});
@@ -31,6 +31,6 @@ public class SendNotificationCommand extends Command {
                         false);
         dbHandler.sendNotification(userId, newNotification);
 
-        return new LinkedHashMap<>();
+        return null;
     }
 }

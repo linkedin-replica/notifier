@@ -1,6 +1,5 @@
 package com.linkedin.replica.notifier.messaging;
 
-
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.linkedin.replica.notifier.config.Configuration;
@@ -11,25 +10,23 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.TimeoutException;
 
-public class MessagesReceiver {
+public class ServicesMessagesReceiver {
     private Configuration configuration = Configuration.getInstance();
     private NotificationService notificationService = new NotificationService();
-    private final String QUEUE_NAME = configuration.getAppConfig("rabbitmq.queue");
-    private final String RABBIT_MQ_IP = configuration.getAppConfig("rabbitmq.ip");;
+    private final String QUEUE_NAME = configuration.getAppConfig("rabbitmq.queue.services");
+    private final String RABBIT_MQ_IP = configuration.getAppConfig("rabbitmq.ip");
 
     private ConnectionFactory factory;
     private Channel channel;
     private Connection connection;
 
-    public MessagesReceiver() throws IOException, TimeoutException {
+    public ServicesMessagesReceiver() throws IOException, TimeoutException {
         factory = new ConnectionFactory();
         factory.setHost(RABBIT_MQ_IP);
         connection = factory.newConnection();
         channel = connection.createChannel();
         // declare the queue if it does not exist
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-
-        System.out.println("Started notification receiver successfully.");
 
         // Create the consumer (listener) for the new messages
         Consumer consumer = new DefaultConsumer(channel) {

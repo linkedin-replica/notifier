@@ -5,6 +5,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         ArangoHandlerTest.class,
         NotificationServiceTest.class,
-        MessagesTest.class
+        ServicesMessagesTest.class,
+        ClientMessagesTest.class
 })
 public class NotificationsTestSuite {}

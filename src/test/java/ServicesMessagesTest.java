@@ -2,7 +2,7 @@ import com.arangodb.ArangoDatabase;
 import com.google.gson.JsonObject;
 import com.linkedin.replica.notifier.config.Configuration;
 import com.linkedin.replica.notifier.database.DatabaseConnection;
-import com.linkedin.replica.notifier.messaging.MessagesReceiver;
+import com.linkedin.replica.notifier.messaging.ServicesMessagesReceiver;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -12,10 +12,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.TimeoutException;
 import org.junit.*;
 
-public class MessagesTest {
+public class ServicesMessagesTest {
     private static Configuration config;
     private static String QUEUE_NAME;
-    private static MessagesReceiver messagesReceiver;
+    private static ServicesMessagesReceiver messagesReceiver;
     private static ArangoDatabase arangoDb;
 
     @BeforeClass
@@ -28,8 +28,8 @@ public class MessagesTest {
         config = Configuration.getInstance();
 
         // init message receiver
-        QUEUE_NAME = config.getAppConfig("rabbitmq.queue");
-        messagesReceiver = new MessagesReceiver();
+        QUEUE_NAME = config.getAppConfig("rabbitmq.queue.services");
+        messagesReceiver = new ServicesMessagesReceiver();
 
         // init db
         arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(

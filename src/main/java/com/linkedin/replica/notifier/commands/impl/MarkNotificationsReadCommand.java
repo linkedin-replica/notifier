@@ -12,7 +12,7 @@ public class MarkNotificationsReadCommand extends Command {
         super(args);
     }
 
-    public LinkedHashMap<String, Object> execute() {
+    public Object execute() {
         NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
@@ -22,6 +22,6 @@ public class MarkNotificationsReadCommand extends Command {
         // mark notifications as read in db
         dbHandler.markAllNotificationsAsRead(userId);
 
-        return new LinkedHashMap<>();
+        return null;
     }
 }
