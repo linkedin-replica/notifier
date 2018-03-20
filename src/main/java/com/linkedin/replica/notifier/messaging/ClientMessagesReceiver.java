@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.linkedin.replica.notifier.config.Configuration;
 import com.linkedin.replica.notifier.database.DatabaseConnection;
+import com.linkedin.replica.notifier.exceptions.BadRequestException;
 import com.linkedin.replica.notifier.services.NotificationService;
 import com.rabbitmq.client.*;
 
@@ -62,7 +63,13 @@ public class ClientMessagesReceiver {
                     if(results != null)
                         response.put("results", results);
                     response.put("statusCode", 200);
-                } catch (Exception e) {
+                }
+                catch (BadRequestException e) {
+                    // set status code to 400
+                    response.put("statusCode", "400");
+                    response.put("error", e.getMessage());
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     // set status code to 500
                     response.put("statusCode", "500");
