@@ -12,7 +12,7 @@ public class Workers {
     
     private Workers(){
     	// initialize executor pool to a FixedThreadPool with the number of threads configured 
-    	executor = Executors.newFixedThreadPool(Integer.parseInt(Configuration.getInstance().getAppConfigProp("app.max_thread_count")));   	
+    	executor = Executors.newFixedThreadPool(Integer.parseInt(Configuration.getInstance().getAppConfigProp("app.max_thread_count")));
     }
     
     public static Workers getInstance(){

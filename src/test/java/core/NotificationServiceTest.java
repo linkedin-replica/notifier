@@ -1,3 +1,5 @@
+package core;
+
 import com.arangodb.ArangoDatabase;
 import com.linkedin.replica.notifier.database.DatabaseConnection;
 import com.linkedin.replica.notifier.models.Notification;
@@ -23,19 +25,20 @@ public class NotificationServiceTest {
         String rootFolder = "src/main/resources/config/";
         Configuration.init(rootFolder + "app.config",
                 rootFolder + "arango.test.config",
-                rootFolder + "commands.config");
+                rootFolder + "commands.config",
+                rootFolder + "controller.config");
         DatabaseConnection.init();
         config = Configuration.getInstance();
         notificationService = new NotificationService();
         arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
-                Configuration.getInstance().getArangoConfig("db.name")
+                Configuration.getInstance().getArangoConfigProp("db.name")
         );
     }
 
     @Before
     public void initBeforeTest() throws IOException {
         arangoDb.createCollection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         );
     }
 
@@ -80,7 +83,7 @@ public class NotificationServiceTest {
     @After
     public void cleanAfterTest() throws IOException {
         arangoDb.collection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         ).drop();
     }
 

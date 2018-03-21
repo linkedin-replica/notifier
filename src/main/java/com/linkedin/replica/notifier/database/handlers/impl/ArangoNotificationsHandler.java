@@ -24,8 +24,8 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
         // init db
         Configuration config = Configuration.getInstance();
         ArangoDB arangoDriver = DatabaseConnection.getInstance().getArangoDriver();
-        collectionName = config.getArangoConfig("collection.notifications.name");
-        dbInstance = arangoDriver.db(config.getArangoConfig("db.name"));
+        collectionName = config.getArangoConfigProp("collection.notifications.name");
+        dbInstance = arangoDriver.db(config.getArangoConfigProp("db.name"));
         collection = dbInstance.collection(collectionName);
     }
 

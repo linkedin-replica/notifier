@@ -1,3 +1,5 @@
+package messaging;
+
 import com.arangodb.ArangoDatabase;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -36,21 +38,22 @@ public class ClientMessagesTest {
         String rootFolder = "src/main/resources/config/";
         Configuration.init(rootFolder + "app.config",
                 rootFolder + "arango.test.config",
-                rootFolder + "commands.config");
+                rootFolder + "commands.config",
+                rootFolder + "controller.config");
         DatabaseConnection.init();
         config = Configuration.getInstance();
 
         // init message receiver
-        QUEUE_NAME = config.getAppConfig("rabbitmq.queue.client");
+        QUEUE_NAME = config.getAppConfigProp("rabbitmq.queue.client");
         messagesReceiver = new ClientMessagesReceiver();
 
         // init db
         arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
-                Configuration.getInstance().getArangoConfig("db.name")
+                Configuration.getInstance().getArangoConfigProp("db.name")
         );
 
         arangoDb.createCollection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         );
 
         arangoHandler = new ArangoNotificationsHandler();
@@ -140,7 +143,7 @@ public class ClientMessagesTest {
         connection.close();
         // clean db
         arangoDb.collection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         ).drop();
         DatabaseConnection.getInstance().closeConnections();
     }
