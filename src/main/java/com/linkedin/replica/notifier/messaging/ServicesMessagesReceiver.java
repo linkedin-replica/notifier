@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.linkedin.replica.notifier.config.Configuration;
 import com.linkedin.replica.notifier.services.NotificationService;
+import com.linkedin.replica.notifier.services.Workers;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
@@ -13,8 +14,8 @@ import java.util.concurrent.TimeoutException;
 public class ServicesMessagesReceiver {
     private Configuration configuration = Configuration.getInstance();
     private NotificationService notificationService = new NotificationService();
-    private final String QUEUE_NAME = configuration.getAppConfig("rabbitmq.queue.services");
-    private final String RABBIT_MQ_IP = configuration.getAppConfig("rabbitmq.ip");
+    private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.services");
+    private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
 
     private ConnectionFactory factory;
     private Channel channel;
@@ -34,24 +35,27 @@ public class ServicesMessagesReceiver {
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
+                Runnable messageProcessorRunnable = () -> {
+                    // extract notification info from body and send it
+                    JsonObject object = new JsonParser().parse(new String(body)).getAsJsonObject();
+                    String userId = object.get("userId").getAsString();
+                    String text = object.get("text").getAsString();
+                    String link = object.get("link").getAsString();
+                    HashMap<String, String> args = new HashMap<>();
+                    args.put("userId", userId);
+                    args.put("text", text);
+                    args.put("link", link);
 
-                // extract notification info from body and send it
-                JsonObject object = new JsonParser().parse(new String(body)).getAsJsonObject();
-                String userId = object.get("userId").getAsString();
-                String text = object.get("text").getAsString();
-                String link = object.get("link").getAsString();
-                HashMap<String, String> args = new HashMap<>();
-                args.put("userId", userId);
-                args.put("text", text);
-                args.put("link", link);
+                    String commandName = "send.notification";
+                    try {
+                        notificationService.serve(commandName, args);
+                        System.out.println("Sent a new notification to user with id " + userId);
+                    } catch (Exception e) {
+                        // TODO write error to a log
+                    }
+                };
 
-                String commandName = "send.notification";
-                try {
-                    notificationService.serve(commandName, args);
-                    System.out.println("Sent a new notification to user with id " + userId);
-                } catch (Exception e) {
-                    // TODO write error to a log
-                }
+                Workers.getInstance().submit(messageProcessorRunnable);
             }
         };
 

@@ -1,3 +1,5 @@
+package core;
+
 import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDatabase;
 import com.linkedin.replica.notifier.database.handlers.impl.ArangoNotificationsHandler;
@@ -16,32 +18,33 @@ import static org.junit.Assert.assertEquals;
 public class ArangoHandlerTest {
     private static ArangoNotificationsHandler arangoNotificationsHandler;
     private static ArangoDatabase arangoDb;
-    static Configuration config;
+    private static Configuration config;
 
     @BeforeClass
     public static void init() throws IOException {
         String rootFolder = "src/main/resources/config/";
         Configuration.init(rootFolder + "app.config",
                 rootFolder + "arango.test.config",
-                rootFolder + "commands.config");
+                rootFolder + "commands.config",
+                rootFolder + "controller.config");
         DatabaseConnection.init();
         config = Configuration.getInstance();
         arangoNotificationsHandler = new ArangoNotificationsHandler();
         arangoDb = DatabaseConnection.getInstance().getArangoDriver().db(
-                Configuration.getInstance().getArangoConfig("db.name")
+                Configuration.getInstance().getArangoConfigProp("db.name")
         );
     }
 
     @Before
     public void initBeforeTest() throws IOException {
         arangoDb.createCollection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         );
     }
 
     @Test
     public void testSendNotification() throws IOException {
-        String collectionName = config.getArangoConfig("collection.notifications.name");
+        String collectionName = config.getArangoConfigProp("collection.notifications.name");
         long time = System.currentTimeMillis();
         Notification newNotification =
                 new Notification("notification text",
@@ -52,7 +55,7 @@ public class ArangoHandlerTest {
         arangoNotificationsHandler.sendNotification(userId, newNotification);
         String query = "FOR t in " + collectionName + " RETURN t";
         ArangoCursor<Notification> allNotificationsCursor = arangoDb.query(query,
-                new HashMap<String, Object>(),
+                new HashMap<>(),
                 null,
                 Notification.class);
         List<Notification> allNotifications = new ArrayList<>();
@@ -100,7 +103,7 @@ public class ArangoHandlerTest {
     @After
     public void cleanAfterTest() throws IOException {
         arangoDb.collection(
-                config.getArangoConfig("collection.notifications.name")
+                config.getArangoConfigProp("collection.notifications.name")
         ).drop();
     }
 
