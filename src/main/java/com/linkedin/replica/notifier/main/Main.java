@@ -14,7 +14,7 @@ public class Main {
     private ClientMessagesReceiver clientMessagesReceiver;
     private ServicesMessagesReceiver servicesMessagesReceiver;
 
-    public void start(String... args) throws ClassNotFoundException, IOException, SQLException, TimeoutException {
+    public void start(String... args) throws ClassNotFoundException, IOException, SQLException, TimeoutException, InterruptedException {
         if(args.length != 4)
             throw new IllegalArgumentException("Expected three arguments. 1- application config file path "
                     + "2- arango config file path  3- commands config file path " +
@@ -46,18 +46,10 @@ public class Main {
             }
         };
 
-        Runnable controllerRunnable = () -> {
-            try {
-                new Server().start();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                // TODO log
-            }
-        };
-
         startTask(clientMessageRunnable, "Client Message Receiver");
         startTask(servicesMessageRunnable, "Services Message Receiver");
-        startTask(controllerRunnable, "Controller");
+
+        new Server().start();
     }
 
     private void startTask(Runnable runnable, String name) {
@@ -72,7 +64,7 @@ public class Main {
         servicesMessagesReceiver.closeConnection();
     }
 
-    public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, TimeoutException {
+    public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, TimeoutException, InterruptedException {
         new Main().start(args);
     }
 }
