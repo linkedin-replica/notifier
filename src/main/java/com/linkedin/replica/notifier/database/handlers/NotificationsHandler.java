@@ -10,26 +10,26 @@ public interface NotificationsHandler extends DatabaseHandler{
      * @param userId: The user to send the notification to
      * @param notification: The new notification
      */
-    void sendNotification(int userId, Notification notification);
+    void sendNotification(String userId, Notification notification);
 
     /**
      * Get all notifications for a user
      * @param userId: The user owning the notifications
      * @return The notifications
      */
-    List<Notification> getAllNotifications(int userId);
+    List<Notification> getAllNotifications(String userId);
 
     /**
      * Get all unread notifications for a user
      * @param userId: The user owning the notifications
      * @return The new notifications
      */
-    List<Notification> getUnreadNotifications(int userId);
+    List<Notification> getUnreadNotifications(String userId);
 
 
     /**
      * Mark all notifications of a user as read
      * @param userId: The owner of the notifications
      */
-    void markAllNotificationsAsRead(int userId);
+    void markAllNotificationsAsRead(String userId);
 }

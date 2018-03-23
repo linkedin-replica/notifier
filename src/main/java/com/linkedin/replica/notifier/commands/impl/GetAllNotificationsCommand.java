@@ -20,6 +20,6 @@ public class GetAllNotificationsCommand extends Command {
         validateArgs(new String[]{"userId"});
 
         // get notifications from db
-        return dbHandler.getAllNotifications(Integer.parseInt(args.get("userId").toString()));
+        return dbHandler.getAllNotifications(args.get("userId").toString());
     }
 }

@@ -29,18 +29,18 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
         collection = dbInstance.collection(collectionName);
     }
 
-    public void sendNotification(int userId, Notification notification) {
+    public void sendNotification(String userId, Notification notification) {
         notification.setUserId(userId);
         collection.insertDocument(notification);
     }
 
-    public List<Notification> getAllNotifications(int userId) {
+    public List<Notification> getAllNotifications(String userId) {
         // form db query
         String query = "For t in " + collectionName + " FILTER t.userId == @userId RETURN t";
         return getNotificationsFromDB(query, userId);
     }
 
-    public List<Notification> getUnreadNotifications(int userId) {
+    public List<Notification> getUnreadNotifications(String userId) {
         // form query db
         String query = "For t in " + collectionName + " FILTER " +
                 "t.userId == @userId &&" +
@@ -51,7 +51,7 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
     }
 
     @Override
-    public void markAllNotificationsAsRead(int userId) {
+    public void markAllNotificationsAsRead(String userId) {
         // form the query
         String query = "FOR t in " + collectionName + " FILTER" +
                 " t.userId == @userId &&" +
@@ -72,7 +72,7 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
      * @param userId: The owner of the notifications
      * @return The queried notifications
      */
-    private List<Notification> getNotificationsFromDB(String query, int userId) {
+    private List<Notification> getNotificationsFromDB(String query, String userId) {
         // bind the variables in the query
         Map<String, Object> bindVars = new HashMap<>();
         bindVars.put("userId", userId);

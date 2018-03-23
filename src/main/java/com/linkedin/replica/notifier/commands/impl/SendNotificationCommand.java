@@ -18,7 +18,7 @@ public class SendNotificationCommand extends Command {
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId", "text", "link"});
 
-        int userId = Integer.parseInt(args.get("userId").toString());
+        String userId = args.get("userId").toString();
         String notificationText = args.get("text").toString();
         String notificationLink = args.get("link").toString();
         long timeStamp = System.currentTimeMillis();

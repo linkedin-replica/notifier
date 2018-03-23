@@ -20,6 +20,6 @@ public class GetUnreadNotificationsCommand extends Command {
         validateArgs(new String[]{"userId"});
 
         // get unread notifications from db
-        return dbHandler.getUnreadNotifications(Integer.parseInt(args.get("userId").toString()));
+        return dbHandler.getUnreadNotifications(args.get("userId").toString());
     }
 }
