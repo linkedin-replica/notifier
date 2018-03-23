@@ -51,7 +51,7 @@ public class ArangoHandlerTest {
                         "notification link",
                         time,
                         false);
-        int userId = 12345;
+        String userId = "12345";
         arangoNotificationsHandler.sendNotification(userId, newNotification);
         String query = "FOR t in " + collectionName + " RETURN t";
         ArangoCursor<Notification> allNotificationsCursor = arangoDb.query(query,
@@ -83,7 +83,7 @@ public class ArangoHandlerTest {
                         "notification link",
                         System.currentTimeMillis(),
                         true);
-        int userId = 1234;
+        String userId = "1234";
         arangoNotificationsHandler.sendNotification(userId, n1);
         arangoNotificationsHandler.sendNotification(userId, n2);
 

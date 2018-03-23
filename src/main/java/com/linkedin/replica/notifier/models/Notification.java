@@ -6,7 +6,7 @@ package com.linkedin.replica.notifier.models;
 public class Notification {
     private String notificationText, link;
     private long timeStamp;
-    private int userId;
+    private String userId;
     private boolean read;
     public Notification(String text, String link, long timeStamp, boolean read) {
         this.notificationText = text;
@@ -17,11 +17,11 @@ public class Notification {
 
     public Notification() {}
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 

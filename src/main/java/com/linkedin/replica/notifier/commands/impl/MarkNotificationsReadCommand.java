@@ -17,7 +17,7 @@ public class MarkNotificationsReadCommand extends Command {
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
 
-        int userId = Integer.parseInt(args.get("userId").toString());
+        String userId = args.get("userId").toString();
 
         // mark notifications as read in db
         dbHandler.markAllNotificationsAsRead(userId);

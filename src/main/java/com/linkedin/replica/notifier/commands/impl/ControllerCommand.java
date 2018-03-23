@@ -81,7 +81,7 @@ public class ControllerCommand extends Command {
 		JsonObject obj = convert(val);
 		
 		// validate embedded JSON object obj to check that all obligatory key value pairs are available
-		validate(obj, new String[]{"fileName", "configPropKey","handler", "bytes"});
+		validate(obj, "fileName", "configPropKey","handler", "bytes");
 	
 		// remove double quotations of string value in JSON object
 		String s = obj.get("bytes").toString().replaceAll("\"", "");
