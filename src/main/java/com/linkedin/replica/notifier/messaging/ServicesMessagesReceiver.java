@@ -16,6 +16,8 @@ public class ServicesMessagesReceiver {
     private NotificationService notificationService = new NotificationService();
     private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.services");
     private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
+    private final String RABBIT_MQ_USERNAME = configuration.getAppConfigProp("rabbitmq.username");
+    private final String RABBIT_MQ_PASSWORD = configuration.getAppConfigProp("rabbitmq.password");
 
     private ConnectionFactory factory;
     private Channel channel;
@@ -23,6 +25,8 @@ public class ServicesMessagesReceiver {
 
     public ServicesMessagesReceiver() throws IOException, TimeoutException {
         factory = new ConnectionFactory();
+        factory.setUsername(RABBIT_MQ_USERNAME);
+        factory.setPassword(RABBIT_MQ_PASSWORD);
         factory.setHost(RABBIT_MQ_IP);
         connection = factory.newConnection();
         channel = connection.createChannel();
