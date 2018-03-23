@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.linkedin.replica.notifier.config.Configuration;
-import com.linkedin.replica.notifier.database.DatabaseConnection;
 import com.linkedin.replica.notifier.exceptions.BadRequestException;
 import com.linkedin.replica.notifier.services.NotificationService;
 import com.linkedin.replica.notifier.services.Workers;
@@ -20,6 +19,8 @@ public class ClientMessagesReceiver {
     private NotificationService notificationService = new NotificationService();
     private final String QUEUE_NAME = configuration.getAppConfigProp("rabbitmq.queue.client");
     private final String RABBIT_MQ_IP = configuration.getAppConfigProp("rabbitmq.ip");
+    private final String RABBIT_MQ_USERNAME = configuration.getAppConfigProp("rabbitmq.username");
+    private final String RABBIT_MQ_PASSWORD = configuration.getAppConfigProp("rabbitmq.password");
 
     private ConnectionFactory factory;
     private Channel channel;
@@ -28,7 +29,10 @@ public class ClientMessagesReceiver {
 
     public ClientMessagesReceiver() throws IOException, TimeoutException {
         factory = new ConnectionFactory();
+        factory.setUsername(RABBIT_MQ_USERNAME);
+        factory.setPassword(RABBIT_MQ_PASSWORD);
         factory.setHost(RABBIT_MQ_IP);
+
         connection = factory.newConnection();
         channel = connection.createChannel();
 
