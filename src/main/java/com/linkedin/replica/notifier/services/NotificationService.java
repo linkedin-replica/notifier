@@ -1,5 +1,6 @@
 package com.linkedin.replica.notifier.services;
 
+import com.linkedin.replica.notifier.cache.CacheHandler;
 import com.linkedin.replica.notifier.database.handlers.DatabaseHandler;
 import com.linkedin.replica.notifier.commands.Command;
 import com.linkedin.replica.notifier.config.Configuration;
@@ -23,9 +24,12 @@ public class NotificationService {
         Command command = (Command) constructor.newInstance(args);
 
         Class<?> dbHandlerClass = config.getHandlerClass(commandName);
-        DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();
+        Class<?> cacheHandlerClass = config.getCacheHandlerClass(commandName);
 
+        DatabaseHandler dbHandler = (DatabaseHandler) dbHandlerClass.newInstance();
+        CacheHandler cacheHandler = (CacheHandler) cacheHandlerClass.newInstance();
         command.setDbHandler(dbHandler);
+        command.setCacheHandler(cacheHandler);
 
         return command.execute();
     }
