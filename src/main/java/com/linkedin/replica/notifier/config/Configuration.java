@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 
+import com.linkedin.replica.notifier.cache.NotifierCacheHandler;
 import com.linkedin.replica.notifier.commands.Command;
 import com.linkedin.replica.notifier.database.handlers.NotificationsHandler;;
 
@@ -62,6 +63,12 @@ public class Configuration {
     public Class getHandlerClass(String commandName) throws ClassNotFoundException {
         String handlerPackageName = NotificationsHandler.class.getPackage().getName() + ".impl";
         String handlerClassPath = handlerPackageName + "." + commandConfig.get(commandName + ".handler");
+        return Class.forName(handlerClassPath);
+    }
+
+    public Class getCacheHandlerClass(String commandName) throws ClassNotFoundException {
+        String handlerPackageName = NotifierCacheHandler.class.getPackage().getName() + ".impl";
+        String handlerClassPath = handlerPackageName + "." + commandConfig.get(commandName + ".cache.handler");
         return Class.forName(handlerClassPath);
     }
 
