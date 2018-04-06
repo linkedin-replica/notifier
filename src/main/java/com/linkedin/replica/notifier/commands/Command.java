@@ -1,6 +1,7 @@
 package com.linkedin.replica.notifier.commands;
 
 
+import com.linkedin.replica.notifier.cache.CacheHandler;
 import com.linkedin.replica.notifier.database.handlers.DatabaseHandler;
 import com.linkedin.replica.notifier.exceptions.BadRequestException;
 
@@ -11,7 +12,7 @@ import java.util.LinkedHashMap;
 public abstract class Command {
     protected HashMap<String, Object> args;
     protected DatabaseHandler dbHandler;
-
+    protected CacheHandler cacheHandler;
     public Command(HashMap<String, Object> args) {
         this.args = args;
     }
@@ -28,6 +29,14 @@ public abstract class Command {
      */
     public void setDbHandler(DatabaseHandler dbHandler) {
         this.dbHandler = dbHandler;
+    }
+
+    /**
+     * Set the configured cache handler
+     * @param cacheHandler: The configured cache handler
+     */
+    public void setCacheHandler(CacheHandler cacheHandler) {
+        this.cacheHandler = cacheHandler;
     }
 
     protected void validateArgs(String[] requiredArgs) {
