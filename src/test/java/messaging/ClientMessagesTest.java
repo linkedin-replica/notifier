@@ -100,7 +100,7 @@ public class ClientMessagesTest {
 
     @Test
     public void testSendMessage() throws IOException, TimeoutException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, InterruptedException {
-        arangoHandler.sendNotification("12314", new Notification("Text", "Link", 0, false));
+        arangoHandler.sendNotification(new Notification("1", "Text", "Link", "12314", 0, false));
 
         JsonObject object = new JsonObject();
         object.addProperty("commandName", "notifications.all");

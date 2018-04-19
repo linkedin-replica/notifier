@@ -7,6 +7,7 @@ import com.linkedin.replica.notifier.models.Notification;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.UUID;
 
 public class SendNotificationCommand extends Command {
     public SendNotificationCommand(HashMap<String, Object> args) {
@@ -17,7 +18,7 @@ public class SendNotificationCommand extends Command {
         NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId", "text", "link"});
-
+        String notificationId = UUID.randomUUID().toString();
         String userId = args.get("userId").toString();
         String notificationText = args.get("text").toString();
         String notificationLink = args.get("link").toString();
@@ -25,11 +26,13 @@ public class SendNotificationCommand extends Command {
 
         // insert new notification in db
         Notification newNotification =
-                new Notification(notificationText,
+                new Notification(notificationId,
+                        notificationText,
                         notificationLink,
+                        userId,
                         timeStamp,
                         false);
-        dbHandler.sendNotification(userId, newNotification);
+        dbHandler.sendNotification(newNotification);
 
         return null;
     }

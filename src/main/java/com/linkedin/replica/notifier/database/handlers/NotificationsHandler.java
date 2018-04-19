@@ -7,10 +7,9 @@ import java.util.List;
 public interface NotificationsHandler extends DatabaseHandler{
     /**
      * Send a new notification to the user
-     * @param userId: The user to send the notification to
      * @param notification: The new notification
      */
-    void sendNotification(String userId, Notification notification);
+    void sendNotification(Notification notification);
 
     /**
      * Get all notifications for a user

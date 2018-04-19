@@ -29,8 +29,7 @@ public class ArangoNotificationsHandler implements NotificationsHandler {
         collection = dbInstance.collection(collectionName);
     }
 
-    public void sendNotification(String userId, Notification notification) {
-        notification.setUserId(userId);
+    public void sendNotification(Notification notification) {
         collection.insertDocument(notification);
     }
 

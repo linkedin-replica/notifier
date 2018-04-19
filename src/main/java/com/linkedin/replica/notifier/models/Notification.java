@@ -1,18 +1,25 @@
 package com.linkedin.replica.notifier.models;
 
+import com.arangodb.entity.DocumentField;
+
 /**
  * Holder model for the notification
  */
 public class Notification {
-    private String notificationText, link;
-    private long timeStamp;
+    @DocumentField(DocumentField.Type.KEY)
+    private String notificationId;
+    private String text, link;
+    private long timestamp;
     private String userId;
     private boolean read;
-    public Notification(String text, String link, long timeStamp, boolean read) {
-        this.notificationText = text;
+
+    public Notification(String id, String text, String link, String userId, long timestamp, boolean read) {
+        this.userId = userId;
+        this.text = text;
         this.link = link;
-        this.timeStamp = timeStamp;
+        this.timestamp = timestamp;
         this.read = read;
+        this.notificationId = id;
     }
 
     public Notification() {}
@@ -25,19 +32,23 @@ public class Notification {
         return userId;
     }
 
-    public String getNotificationText() {
-        return notificationText;
+    public String getText() {
+        return text;
     }
 
     public String getLink() {
         return link;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public boolean isRead() {
         return read;
+    }
+
+    public String getNotificationId() {
+        return notificationId;
     }
 }
