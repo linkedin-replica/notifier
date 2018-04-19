@@ -47,12 +47,13 @@ public class ArangoHandlerTest {
         String collectionName = config.getArangoConfigProp("collection.notifications.name");
         long time = System.currentTimeMillis();
         Notification newNotification =
-                new Notification("notification text",
+                new Notification("1,",
+                        "notification text",
                         "notification link",
+                        "12345",
                         time,
                         false);
-        String userId = "12345";
-        arangoNotificationsHandler.sendNotification(userId, newNotification);
+        arangoNotificationsHandler.sendNotification(newNotification);
         String query = "FOR t in " + collectionName + " RETURN t";
         ArangoCursor<Notification> allNotificationsCursor = arangoDb.query(query,
                 new HashMap<>(),
@@ -65,27 +66,31 @@ public class ArangoHandlerTest {
         assertEquals("Expected to have one notification in com.linkedin.replica.database", 1, allNotifications.size());
 
         newNotification = allNotifications.get(0);
-        assertEquals("Expected matching notification text", "notification text", newNotification.getNotificationText());
+        assertEquals("Expected matching notification text", "notification text", newNotification.getText());
         assertEquals("Expected matching notification link", "notification link", newNotification.getLink());
-        assertEquals("Expected matching notification time", time, newNotification.getTimeStamp());
+        assertEquals("Expected matching notification time", time, newNotification.getTimestamp());
         assertEquals("Expected notification to be unread", false, newNotification.isRead());
     }
 
     @Test
     public void testNotificationInteraction() {
+        String userId = "1234";
         Notification n1 =
-                new Notification("notification text",
+                new Notification("2",
+                        "notification text",
                         "notification link",
+                        userId,
                         System.currentTimeMillis(),
                         false);
         Notification n2 =
-                new Notification("notification text",
+                new Notification("3",
+                        "notification text",
                         "notification link",
+                        userId,
                         System.currentTimeMillis(),
                         true);
-        String userId = "1234";
-        arangoNotificationsHandler.sendNotification(userId, n1);
-        arangoNotificationsHandler.sendNotification(userId, n2);
+        arangoNotificationsHandler.sendNotification(n1);
+        arangoNotificationsHandler.sendNotification(n2);
 
         List<Notification> all = arangoNotificationsHandler.getAllNotifications(userId);
         assertEquals("Expected 2 notifications", 2, all.size());
