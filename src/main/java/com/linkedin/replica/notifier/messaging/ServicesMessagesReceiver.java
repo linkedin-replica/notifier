@@ -50,8 +50,9 @@ public class ServicesMessagesReceiver {
                     args.put("text", text);
                     args.put("link", link);
 
-                    String commandName = "send.notification";
+                    String commandName = "notifications.send";
                     try {
+                        System.out.println(commandName + " " + args);
                         notificationService.serve(commandName, args);
                         System.out.println("Sent a new notification to user with id " + userId);
                     } catch (Exception e) {

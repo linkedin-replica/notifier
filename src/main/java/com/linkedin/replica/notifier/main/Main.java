@@ -65,6 +65,13 @@ public class Main {
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IOException, SQLException, TimeoutException, InterruptedException {
+        args = new String[] {
+                "src/main/resources/config/app.config",
+                "src/main/resources/config/arango.config",
+                "src/main/resources/config/commands.config",
+                "src/main/resources/config/controller.config",
+
+        };
         new Main().start(args);
     }
 }

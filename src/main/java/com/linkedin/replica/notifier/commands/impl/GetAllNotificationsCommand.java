@@ -18,7 +18,7 @@ public class GetAllNotificationsCommand extends Command {
         NotificationsHandler dbHandler = (NotificationsHandler) this.dbHandler;
         // validate that all required arguments are passed
         validateArgs(new String[]{"userId"});
-
+        System.out.println("User " + args.get("userId") + " gets all nots.");
         // get notifications from db
         return dbHandler.getAllNotifications(args.get("userId").toString());
     }

@@ -24,6 +24,7 @@ public class SendNotificationCommand extends Command {
         String notificationLink = args.get("link").toString();
         long timeStamp = System.currentTimeMillis();
 
+        System.out.println("SENDING NOT");
         // insert new notification in db
         Notification newNotification =
                 new Notification(notificationId,
